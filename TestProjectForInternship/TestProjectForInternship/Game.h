@@ -130,6 +130,7 @@ namespace Game {
 	};
 
 	class Player : public Creature {
+	private:
 		int HealCount = 0;
 		const int MaxHeals = 4;
 
@@ -157,7 +158,6 @@ namespace Game {
 
 			std::cout << Name << " heals for " << healAmount << " health and now has " << Health << " health." << std::endl;
 		}
-
 	};
 
 	class Monster : public Creature {

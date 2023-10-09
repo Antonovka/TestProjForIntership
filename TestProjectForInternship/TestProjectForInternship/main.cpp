@@ -8,6 +8,11 @@ using namespace std;
 bool TestCreatePlayer();
 bool TestWrongDefense();
 bool TestWrongAttack();
+bool TestWrongHealth();
+bool TestPlayerTakeDamage();
+bool TestPlayerHeal();
+bool TestPlayerIsDead();
+bool TestPlayerHealAfterDeath();
 
 int main() {
 	std::cout << "Start testing" << std::endl;
@@ -15,6 +20,11 @@ int main() {
 	assert(TestCreatePlayer());
 	assert(TestWrongDefense());
 	assert(TestWrongAttack());
+	assert(TestWrongHealth());
+	assert(TestPlayerTakeDamage());
+	assert(TestPlayerHeal());
+	assert(TestPlayerIsDead());
+	assert(TestPlayerHealAfterDeath());
 
 	return 0;
 }
@@ -109,3 +119,98 @@ bool TestWrongHealth() {
 	return true;
 }
 
+bool TestPlayerTakeDamage() {
+	std::cout << __func__ << std::endl;
+
+	std::string name = "Player";
+	int attack = 10;
+	int defense = 10;
+	int health = 100;
+	Game::DamageRange damageRange(0, 10);
+
+	Game::Player player(name, attack, defense, health, damageRange);
+
+	int damage = 10; 
+	player.TakeDamage(damage);
+
+	if (player.GetHealth() != (health - damage)) {
+		return false;
+	}
+
+	return true;
+}
+
+bool TestPlayerHeal() {
+	std::cout << __func__ << std::endl;
+
+	std::string name = "Player";
+	int attack = 10;
+	int defense = 10;
+	int health = 100;
+	Game::DamageRange damageRange(0, 10);
+
+	Game::Player player(name, attack, defense, health, damageRange);
+
+	int damage = 50;
+	player.TakeDamage(damage);
+
+	player.Heal();
+
+	if (player.GetHealth() <= health - damage) {
+		return false;
+	}
+
+	if (player.GetHealth() >= health) {
+		return false;
+	}
+
+	return true;
+}
+
+bool TestPlayerIsDead() {
+	std::cout << __func__ << std::endl;
+
+	std::string name = "Player";
+	int attack = 10;
+	int defense = 10;
+	int health = 100;
+	Game::DamageRange damageRange(0, 10);
+
+	Game::Player player(name, attack, defense, health, damageRange);
+
+	int damage = health + 50;
+	player.TakeDamage(damage);
+
+	if (!player.IsDead()) {
+		return false;
+	}
+
+	return true;
+}
+
+bool TestPlayerHealAfterDeath() {
+	std::cout << __func__ << std::endl;
+
+	std::string name = "Player";
+	int attack = 10;
+	int defense = 10;
+	int health = 100;
+	Game::DamageRange damageRange(0, 10);
+
+	Game::Player player(name, attack, defense, health, damageRange);
+
+	int damage = health + 50;
+	player.TakeDamage(damage);
+
+	player.Heal();
+
+	if (!player.IsDead()) {
+		return false;
+	}
+
+	if (player.GetHealth() != 0) {
+		return false;
+	}
+
+	return true;
+}
