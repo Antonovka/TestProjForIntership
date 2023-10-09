@@ -6,19 +6,21 @@
 using namespace std;
 
 bool TestCreatePlayer();
+bool TestWrongDefense();
+bool TestWrongAttack();
 
 int main() {
-	Game::DamageRange damageRange (0, 10);
-	Game::Player player ("Player", 12, 100, 2, damageRange);
-
 	std::cout << "Start testing" << std::endl;
 
 	assert(TestCreatePlayer());
+	assert(TestWrongDefense());
+	assert(TestWrongAttack());
+
 	return 0;
 }
 
 bool TestCreatePlayer() {
-	std::cout << "TestCreatePlayer" << std::endl;
+	std::cout << __func__ << std::endl;
 
 	std::string name = "Player";
 	int attack = 10;
@@ -32,13 +34,78 @@ bool TestCreatePlayer() {
 		return false;
 	}
 
-	if (player.GetName().compare(name) != 0) {
+	if (player.GetDefense() != defense) {
 		return false;
 	}
 
-	if (player.GetDefense() != 0) {
+	if (player.GetAttack() != attack) {
+		return false;
+	}
+
+	if (player.GetHealth() != health) {
 		return false;
 	}
 
 	return true;
 }
+
+bool TestWrongDefense() {
+	std::cout << __func__ << std::endl;
+
+	std::string name = "Player";
+	int attack = 10;
+	int defense = 50;
+	int health = 10;
+	Game::DamageRange damageRange(0, 10);
+
+	try {
+		Game::Player player(name, attack, defense, health, damageRange);
+		return false;
+	}
+	catch (std::invalid_argument& e) {
+		std::cout << e.what() << std::endl;
+	}
+
+	return true;
+}
+
+bool TestWrongAttack() {
+	std::cout << __func__ << std::endl;
+
+	std::string name = "Player";
+	int attack = 50;
+	int defense = 10;
+	int health = 10;
+	Game::DamageRange damageRange(0, 10);
+
+	try {
+		Game::Player player(name, attack, defense, health, damageRange);
+		return false;
+	}
+	catch (std::invalid_argument& e) {
+		std::cout << e.what() << std::endl;
+	}
+
+	return true;
+}
+
+bool TestWrongHealth() {
+	std::cout << __func__ << std::endl;
+
+	std::string name = "Player";
+	int attack = 50;
+	int defense = 10;
+	int health = 10;
+	Game::DamageRange damageRange(0, 10);
+
+	try {
+		Game::Player player(name, attack, defense, health, damageRange);
+		return false;
+	}
+	catch (std::invalid_argument& e) {
+		std::cout << e.what() << std::endl;
+	}
+
+	return true;
+}
+

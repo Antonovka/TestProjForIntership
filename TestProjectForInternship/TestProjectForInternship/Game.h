@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 namespace Game {
 	class DamageRange {
@@ -17,6 +18,10 @@ namespace Game {
 
 			if (Min > Max) {
 				throw std::invalid_argument("Max value must be greater than Min value");
+			}
+
+			if (Min < 0) {
+				throw std::invalid_argument("Min value is less than zero");
 			}
 		}
 
@@ -59,6 +64,14 @@ namespace Game {
 			return Defense;
 		}
 
+		int GetAttack() {
+			return Attack;
+		}
+
+		int GetHealth() {
+			return Health;
+		}
+
 		bool IsDead() {
 			return Health <= 0;
 		}
@@ -76,10 +89,43 @@ namespace Game {
 
 			int healAmount = static_cast<int>(MaxHealth * 0.3);
 			Health = std::min(Health + healAmount, MaxHealth);
+
+			std::cout << Name << " heals for " << healAmount << " health and now has " << Health << " health." << std::endl;
 		}
 
 		void AttackTarget(Creature& target) {
-			int attackModifier = DmgRange.GetMax() - target.Defense + 1;
+			if (IsDead() || target.IsDead()) {
+				return;
+			}
+
+			int attackModifier = Attack - target.Defense + 1;
+
+			if (attackModifier < 1) {
+				attackModifier = 1;
+			}
+
+			std::vector<int> diceRolls;
+			for (int i = 0; i < attackModifier; ++i) {
+				diceRolls.push_back(rand() % 6 + 1);
+			}
+
+			bool successfulAttack = false;
+			for (int roll : diceRolls) {
+				if (roll == 5 || roll == 6) {
+					successfulAttack = true;
+					break;
+				}
+			}
+
+			if (successfulAttack) {
+				int damage = rand() % (DmgRange.GetMax() - DmgRange.GetMin() + 1) + DmgRange.GetMin();
+				target.TakeDamage(damage);
+			}
+		}
+
+		void TakeDamage(int damage) {
+			Health = std::max(Health - damage, 0);
+			std::cout << Name << " takes " << damage << " damage and now has " << Health << " health." << std::endl;
 		}
 
 	protected:
