@@ -38,6 +38,7 @@ namespace Game {
 	};
 
 	class Creature {
+	protected:
 		std::string Name;
 		int Defense = -1;
 		int Attack = -1;
@@ -74,23 +75,6 @@ namespace Game {
 
 		bool IsDead() {
 			return Health <= 0;
-		}
-
-		void Heal() {
-			if (IsDead()) {
-				return;
-			}
-
-			if (HealCount >= MaxHeals) {
-				return;
-			}
-
-			++HealCount;
-
-			int healAmount = static_cast<int>(MaxHealth * 0.3);
-			Health = std::min(Health + healAmount, MaxHealth);
-
-			std::cout << Name << " heals for " << healAmount << " health and now has " << Health << " health." << std::endl;
 		}
 
 		void AttackTarget(Creature& target) {
@@ -156,6 +140,24 @@ namespace Game {
 			, int health
 			, const Game::DamageRange& dmgRange)
 			: Creature(name, attack, defense, health, dmgRange) {}
+
+		void Heal() {
+			if (IsDead()) {
+				return;
+			}
+
+			if (HealCount >= MaxHeals) {
+				return;
+			}
+
+			++HealCount;
+
+			int healAmount = static_cast<int>(MaxHealth * 0.3);
+			Health = std::min(Health + healAmount, MaxHealth);
+
+			std::cout << Name << " heals for " << healAmount << " health and now has " << Health << " health." << std::endl;
+		}
+
 	};
 
 	class Monster : public Creature {
