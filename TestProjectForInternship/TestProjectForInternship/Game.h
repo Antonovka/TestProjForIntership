@@ -46,11 +46,8 @@ namespace Game {
 		int MaxHealth = -1;
 		Game::DamageRange DmgRange;
 
-		int HealCount = 0;
-
 		const int MaxAttackValue = 30;
 		const int MaxDefenseValue = MaxAttackValue;
-		const int MaxHeals = 4;
 
 	public:
 		Creature() = delete;
@@ -133,6 +130,9 @@ namespace Game {
 	};
 
 	class Player : public Creature {
+		int HealCount = 0;
+		const int MaxHeals = 4;
+
 	public:
 		Player(const std::string& name
 			, int attack
